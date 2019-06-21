@@ -1,6 +1,9 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
+import fetch from 'node-fetch';
 import queryString from 'query-string';
-// import { normalize } from 'path';
-import { checkDates } from './utils';
+import { checkDates } from './utils.mjs';
 
 const apiKey = process.env.BUNGIE_API_KEY;
 const baseURL = 'https://www.bungie.net';
@@ -18,8 +21,8 @@ export let getProfile = (type, id, components) => new Promise((resolve, reject) 
     })
     .then((response) => {
         if (response.status !== 200) {
-            console.log('Error Performing GetProfile. Status Code: ' + response.status);
-            reject('Domain token error. No response.data.');
+            console.log('Error Performing GET Profile. Status Code: ' + response.status);
+            reject('Error Performing GET Profile.');
         } else {
             response.json().then((data) => {
                 // console.log(data);
@@ -28,8 +31,8 @@ export let getProfile = (type, id, components) => new Promise((resolve, reject) 
         }
     })
     .catch((err) => {
-        console.log('Fetch Error :-S', err);
-        reject('Domain token error. No response.data.');
+        console.log('Fetch Error : getProfile : ', id, ' : ', err);
+        reject('Fetch Error : getProfile');
     });
 })
 
@@ -45,9 +48,10 @@ export let getActivities = (character, count, mode, page, date=null, rest=[]) =>
     })
     .then((response) => {
         if (response.status !== 200) {
-            console.log('Error Performing GetActivities. Status Code: ' + response.status);
-            // reject('Domain token error. No response.data.');
-            resolve(response)
+            // console.log('Error Performing GET Activities. Status Code: ' + response.status);
+            // reject('Error Performing GET Activities.');
+            // If a profile is private it will 500, so just resolve for now.
+            resolve(rest)
         } else {
             response.json().then((data) => {
                 if (data.Response && data.Response.activities && data.Response.activities.length > 0) {
@@ -68,9 +72,10 @@ export let getActivities = (character, count, mode, page, date=null, rest=[]) =>
         }
     })
     .catch((err) => {
-        console.log('Fetch Error :-S', err);
-        // reject('Domain token error. No response.data.');
-        resolve(getActivities(character, count, mode, page, date, rest))
+        console.log('Fetch Error : getActivities : ', err);
+        reject('Fetch Error : getActivities');
+        // Instead of reject. Try again. Sometimes a request will randomly timeout. TODO: Add back-off.
+        // resolve(getActivities(character, count, mode, page, date, rest))
     });
 })
 
@@ -90,8 +95,8 @@ export let searchClans = (name) => new Promise((resolve, reject) => {
     })
     .then((response) => {
         if (response.status !== 200) {
-            console.log('Error Performing GroupSearch. Status Code: ' + response.status);
-            reject('Domain token error. No response.data.');
+            console.log('Error Performing POST GroupSearch. Status Code: ' + response.status);
+            reject('Error Performing POST GroupSearch.');
         } else {
             response.json().then((data) => {
                 // console.log(data);
@@ -100,8 +105,8 @@ export let searchClans = (name) => new Promise((resolve, reject) => {
         }
     })
     .catch((err) => {
-        console.log('Fetch Error :-S', err);
-        reject('Domain token error. No response.data.');
+        console.log('Fetch Error : searchClans : ', err);
+        reject('Fetch Error : searchClans');
     });
 })
 
@@ -116,7 +121,7 @@ export let getClan = (groupId) => new Promise((resolve, reject) => {
     .then((response) => {
         if (response.status !== 200) {
             console.log('Error Performing GET Clan. Status Code: ' + response.status);
-            reject('Domain token error. No response.data.');
+            reject('Error Performing GET Clan.');
         } else {
             response.json().then((data) => {
                 // console.log(data);
@@ -125,8 +130,8 @@ export let getClan = (groupId) => new Promise((resolve, reject) => {
         }
     })
     .catch((err) => {
-        console.log('Fetch Error :-S', err);
-        reject('Domain token error. No response.data.');
+        console.log('Fetch Error : getClan : ', err);
+        reject('Fetch Error : getClan');
     });
 })
 
@@ -143,16 +148,16 @@ export let getClanMembers = (groupId) => new Promise((resolve, reject) => {
     .then((response) => {
         if (response.status !== 200) {
             console.log('Error Performing GET Clan Members. Status Code: ' + response.status);
-            reject('Domain token error. No response.data.');
+            reject('Error Performing GET Clan Members.');
         } else {
             response.json().then((data) => {
-                console.log(data);
+                // console.log(data);
                 resolve(data.Response);
             });
         }
     })
     .catch((err) => {
-        console.log('Fetch Error :-S', err);
-        reject('Domain token error. No response.data.');
+        console.log('Fetch Error : getClanMembers : ', err);
+        reject('Fetch Error : getClanMembers');
     });
 })
