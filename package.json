@@ -1,0 +1,23 @@
+{
+  "name": "d2-clan-discord-bot",
+  "version": "1.0.0",
+  "description": "A discord bot to get titles for your Destiny 2 clan mates.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craigkj312/D2-Clan-Titles-Bot.git"
+  },
+  "author": "Kyle Craig",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/craigkj312/D2-Clan-Titles-Bot/issues"
+  },
+  "homepage": "https://github.com/craigkj312/D2-Clan-Titles-Bot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
